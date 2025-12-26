@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            // Menghubungkan booking dengan layanan tertentu
+            $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->string('customer_name');
+            $table->string('whatsapp');
+            $table->date('booking_date');
+            $table->string('location'); // Kabupaten & Kecamatan
+            $table->text('address_details'); // Alamat lengkap pelanggan
+            $table->string('status')->default('pending'); // pending, confirmed, completed, cancelled
             $table->timestamps();
         });
     }

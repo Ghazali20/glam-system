@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->string('name'); // Contoh: Paket Wedding Luxury
+            $table->text('description')->nullable();
+            $table->decimal('price', 15, 2); // Harga dasar paket
+            $table->string('category'); // Wedding, Graduation, atau Special Occasion
             $table->timestamps();
         });
     }

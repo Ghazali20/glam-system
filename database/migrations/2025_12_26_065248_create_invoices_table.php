@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            // Setiap invoice harus punya relasi ke data booking
+            $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+            $table->string('invoice_number')->unique(); // Contoh: INV-20251226-XXXX
+            $table->decimal('total_amount', 15, 2);
+            $table->string('payment_status')->default('unpaid'); // unpaid, partial, paid
+            $table->string('pdf_path')->nullable(); // Lokasi penyimpanan file PDF di server
             $table->timestamps();
         });
     }
