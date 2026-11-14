@@ -8,7 +8,16 @@ use App\Models\Category;
 use App\Models\Portfolio;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () { return view('user.home'); })->name('user.home');
+Route::get('/', function () {
+    $services = Service::with('category')->take(3)->get();
+    $portfolios = Portfolio::with('category')
+        ->where('is_active', true)
+        ->orderBy('order', 'asc')
+        ->take(6)
+        ->get();
+
+    return view('user.home', compact('services', 'portfolios'));
+})->name('user.home');
 
 Route::get('/katalog', function () {
     $categories = Category::has('portfolios')->get();

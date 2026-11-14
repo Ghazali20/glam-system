@@ -37,8 +37,13 @@ class User extends Authenticatable implements FilamentUser // Tambahkan implemen
      */
     public function isAdmin(): bool
     {
-        $adminEmail = env('ADMIN_EMAIL', 'admin01@glambyramdiah.com');
-        return strcasecmp($this->email, $adminEmail) === 0;
+        $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAIL', 'admin01@glambyramdiah.com,ghazali@gmail.com')));
+        foreach ($adminEmails as $email) {
+            if (strcasecmp($this->email, $email) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

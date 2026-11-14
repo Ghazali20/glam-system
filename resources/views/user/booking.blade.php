@@ -107,9 +107,13 @@
                 const response = await fetch('/api/services');
                 const services = await response.json();
                 const select = document.getElementById('service');
-                select.innerHTML = '<option value="" disabled selected>Pilih Paket Makeup</option>';
+                const urlParams = new URLSearchParams(window.location.search);
+                const preselectedServiceId = urlParams.get('service_id');
+
+                select.innerHTML = '<option value="" disabled ' + (!preselectedServiceId ? 'selected' : '') + '>Pilih Paket Makeup</option>';
                 services.forEach(s => {
-                    select.innerHTML += `<option value="${s.id}">${s.name} - Rp ${parseInt(s.price).toLocaleString('id-ID')}</option>`;
+                    const isSelected = preselectedServiceId && String(s.id) === String(preselectedServiceId);
+                    select.innerHTML += `<option value="${s.id}" ${isSelected ? 'selected' : ''}>${s.name} - Rp ${parseInt(s.price).toLocaleString('id-ID')}</option>`;
                 });
             } catch (e) { console.error("Gagal memuat layanan"); }
         }
