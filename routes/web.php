@@ -5,10 +5,21 @@ use App\Http\Controllers\User\BookingHistoryController;
 use App\Http\Controllers\InvoiceController; // Tambahkan ini
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\Portfolio;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () { return view('user.home'); })->name('user.home');
-Route::get('/katalog', function () { return view('user.katalog'); })->name('user.katalog');
+
+Route::get('/katalog', function () {
+    $categories = Category::has('portfolios')->get();
+    $portfolios = Portfolio::with('category')
+        ->where('is_active', true)
+        ->orderBy('order', 'asc')
+        ->latest()
+        ->get();
+
+    return view('user.katalog', compact('portfolios', 'categories'));
+})->name('user.katalog');
 Route::get('/layanan', function () {
     $services = Service::with('category')->get();
     return view('user.layanan', compact('services'));

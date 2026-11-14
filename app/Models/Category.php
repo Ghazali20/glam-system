@@ -14,4 +14,10 @@ class Category extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    // Relasi: Satu kategori memiliki banyak portofolio foto
+    public function portfolios(): HasMany
+    {
+        return $this->hasMany(Portfolio::class);
+    }
 }

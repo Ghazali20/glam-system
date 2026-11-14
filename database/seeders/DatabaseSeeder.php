@@ -23,9 +23,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Memanggil ServiceSeeder untuk mengisi tabel kategori dan layanan
+        // Memanggil ServiceSeeder & PortfolioSeeder
         $this->call([
             ServiceSeeder::class,
+            PortfolioSeeder::class,
         ]);
     }
 }
