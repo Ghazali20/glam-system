@@ -9,35 +9,33 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    /**
-     * Menyimpan data booking dan membuat invoice otomatis
-     */
     public function store(Request $request)
     {
-        // 1. Validasi Input
         $validated = $request->validate([
-            'service_id'    => 'required|exists:services,id',
-            'customer_name' => 'required|string|max:255',
-            'whatsapp'      => 'required|string|max:20',
-            'booking_date'  => 'required|date',
-            'location'      => 'required|string',
+            'service_id'      => 'required|exists:services,id',
+            'customer_name'   => 'required|string|max:255',
+            'whatsapp'        => 'required|string|max:20',
+            'booking_date'    => 'required|date',
+            'location'        => 'required|string',
             'address_details' => 'required|string',
+            'payment_method'  => 'required|string',
         ]);
 
         try {
-            // 2. Gunakan Database Transaction agar data tersimpan aman di tabel Booking & Invoice
             return DB::transaction(function () use ($validated) {
+                // Tambahkan user_id dari user yang login & deadline 10 jam
+                $bookingData = array_merge($validated, [
+                    'user_id'          => Auth::id(), // ID User dari Breeze
+                    'status'           => 'pending',
+                    'payment_deadline' => now()->addHours(10), // Set deadline 10 jam
+                ]);
 
-                // Simpan Data ke Tabel Bookings
-                $booking = Booking::create($validated);
-
-                // Ambil info harga dari tabel services
+                $booking = Booking::create($bookingData);
                 $service = Service::find($validated['service_id']);
-
-                // 3. Logika Pembuatan Nomor Invoice (Contoh: INV-20251226-ABCDE)
                 $invoiceNumber = 'INV-' . date('Ymd') . '-' . strtoupper(Str::random(5));
 
                 $invoice = Invoice::create([
@@ -47,10 +45,9 @@ class BookingController extends Controller
                     'payment_status' => 'unpaid',
                 ]);
 
-                // 4. Respon sukses untuk Frontend
                 return response()->json([
                     'success' => true,
-                    'message' => 'Booking dan Invoice berhasil dibuat!',
+                    'message' => 'Booking berhasil!',
                     'data'    => [
                         'booking' => $booking,
                         'invoice' => $invoice,
@@ -66,12 +63,8 @@ class BookingController extends Controller
         }
     }
 
-    /**
-     * Mengambil daftar layanan untuk ditampilkan di dropdown form (Optional)
-     */
     public function getServices()
     {
-        $services = Service::all();
-        return response()->json($services);
+        return response()->json(Service::all());
     }
 }

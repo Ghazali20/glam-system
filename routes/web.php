@@ -1,7 +1,34 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\BookingHistoryController;
+use App\Http\Controllers\InvoiceController; // Tambahkan ini
+use App\Models\Service;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function () { return view('user.home'); })->name('user.home');
+Route::get('/katalog', function () { return view('user.katalog'); })->name('user.katalog');
+Route::get('/layanan', function () {
+    $services = Service::with('category')->get();
+    return view('user.layanan', compact('services'));
+})->name('user.layanan.index');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+
+    Route::get('/booking', function () { return view('user.booking'); })->name('user.booking.create');
+    Route::post('/booking/store', [BookingHistoryController::class, 'store'])->name('user.booking.store');
+    Route::get('/my-bookings', [BookingHistoryController::class, 'index'])->name('user.bookings.index');
+
+    // Rute Download Invoice
+    Route::get('/invoice/{invoice}/download', [InvoiceController::class, 'download'])->name('invoice.download');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

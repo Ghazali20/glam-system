@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Opsional: Jika Anda menggunakan Bootstrap untuk pagination
+        Paginator::useTailwind();
+
+        // Memastikan skema URL menggunakan HTTPS jika di production (opsional)
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }

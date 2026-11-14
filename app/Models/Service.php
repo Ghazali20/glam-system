@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
-    // Mengizinkan semua kolom diisi secara otomatis lewat Controller
     protected $guarded = [];
 
-    /**
-     * Relasi ke tabel Booking (Satu paket layanan bisa memiliki banyak pesanan)
-     */
+    // Relasi: Layanan dimiliki oleh satu kategori
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);

@@ -123,4 +123,12 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Glam System Business Settings
+    |--------------------------------------------------------------------------
+    */
+    'admin_email' => env('ADMIN_EMAIL', 'admin01@glambyramdiah.com'),
+    'admin_whatsapp' => env('ADMIN_WHATSAPP', '628123456789'),
+
 ];

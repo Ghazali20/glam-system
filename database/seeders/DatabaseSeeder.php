@@ -13,14 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Membuat akun Admin untuk login ke Dashboard nantinya
-        User::factory()->create([
-            'name' => 'Admin GlamByRamdiah',
-            'email' => 'admin@glambyramdiah.com',
-            'password' => bcrypt('password123'), // Ganti dengan password yang lebih aman nanti
-        ]);
+        // Membuat akun Admin untuk login ke Dashboard Filament
+        User::firstOrCreate(
+            ['email' => env('ADMIN_EMAIL', 'admin01@glambyramdiah.com')],
+            [
+                'name' => 'Admin Glam By Ramdiah',
+                'password' => bcrypt('password123'),
+                'email_verified_at' => now(),
+            ]
+        );
 
-        // Memanggil ServiceSeeder untuk mengisi tabel daftar layanan/paket makeup
+        // Memanggil ServiceSeeder untuk mengisi tabel kategori dan layanan
         $this->call([
             ServiceSeeder::class,
         ]);
