@@ -97,6 +97,9 @@
             padding: 0 45px;
         }
         .footer-line { border-top: 1px solid #f5f5f4; margin-bottom: 15px; }
+        .payment-box { margin-top: 25px; padding: 15px; background: #fff7f8; border: 1px solid #ffe4e6; }
+        .payment-box strong { color: #be123c; font-size: 11px; text-transform: uppercase; }
+        .payment-box p { margin: 5px 0 0; font-size: 11px; color: #57534e; }
     </style>
 </head>
 <body>
@@ -145,6 +148,19 @@
         <div class="total-label">Total Pembayaran</div>
         <div class="total-amount">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</div>
     </div>
+
+    @if($invoice->payment_status !== 'paid' && $paymentSetting->is_active)
+        <div class="payment-box">
+            <strong>Instruksi Pembayaran</strong>
+            <p>{{ $paymentSetting->payment_instructions }}</p>
+            @foreach($paymentSetting->activeBankAccounts() as $account)
+                <p><strong style="text-transform:none;color:#1c1917">{{ $account['bank_name'] }}</strong> — {{ $account['account_number'] }} a/n {{ $account['account_holder'] }}</p>
+            @endforeach
+            @if($paymentSetting->qris_image_path)
+                <p>QRIS tersedia pada halaman Riwayat Pesanan atau dapat diminta melalui WhatsApp admin.</p>
+            @endif
+        </div>
+    @endif
 
     <div class="footer">
         <div class="footer-line"></div>

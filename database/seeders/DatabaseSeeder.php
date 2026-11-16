@@ -13,12 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminPassword = env('ADMIN_PASSWORD');
+
+        if (! $adminPassword) {
+            throw new \RuntimeException('ADMIN_PASSWORD wajib diatur sebelum menjalankan database seeder.');
+        }
+
         // Membuat akun Admin untuk login ke Dashboard Filament
         User::firstOrCreate(
             ['email' => env('ADMIN_EMAIL', 'admin01@glambyramdiah.com')],
             [
                 'name' => 'Admin Glam By Ramdiah',
-                'password' => bcrypt('password123'),
+                'password' => $adminPassword,
+                'is_admin' => true,
                 'email_verified_at' => now(),
             ]
         );

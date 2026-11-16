@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BookingResource\Pages;
 use App\Models\Booking;
+use App\Models\PaymentSetting;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -42,10 +43,7 @@ class BookingResource extends Resource
 
                     Forms\Components\Select::make('payment_method')
                         ->label('Metode Pembayaran')
-                        ->options([
-                            'BCA' => 'Transfer BCA (12345678 a/n Ramdiah)',
-                            'Mandiri' => 'Transfer Mandiri (88776655 a/n Ramdiah)',
-                        ])
+                        ->options(fn (): array => PaymentSetting::current()->paymentOptions())
                         ->required(),
 
                     Forms\Components\Select::make('status')
@@ -94,13 +92,24 @@ class BookingResource extends Resource
                     ->color('success')
                     ->action(function () {
                         $records = Booking::where('status', 'confirmed')->with('service')->get();
-                        $csvData = "Nama Pelanggan,WhatsApp,Tanggal,Layanan,Lokasi,Status\n";
 
-                        foreach ($records as $record) {
-                            $csvData .= "{$record->customer_name},{$record->whatsapp},{$record->booking_date},{$record->service->name},{$record->location},{$record->status}\n";
-                        }
+                        return response()->streamDownload(function () use ($records): void {
+                            $handle = fopen('php://output', 'w');
+                            fputcsv($handle, ['Nama Pelanggan', 'WhatsApp', 'Tanggal', 'Layanan', 'Lokasi', 'Status']);
 
-                        return response()->streamDownload(fn () => print($csvData), "Laporan_Lunas.csv");
+                            foreach ($records as $record) {
+                                fputcsv($handle, [
+                                    self::safeSpreadsheetValue($record->customer_name),
+                                    self::safeSpreadsheetValue($record->whatsapp),
+                                    $record->booking_date,
+                                    self::safeSpreadsheetValue($record->service?->name),
+                                    self::safeSpreadsheetValue($record->location),
+                                    $record->status,
+                                ]);
+                            }
+
+                            fclose($handle);
+                        }, "Laporan_Lunas.csv", ['Content-Type' => 'text/csv; charset=UTF-8']);
                     }),
             ])
             ->actions([
@@ -140,6 +149,13 @@ class BookingResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ]);
+    }
+
+    private static function safeSpreadsheetValue(?string $value): string
+    {
+        $value = (string) $value;
+
+        return preg_match('/^[=+\-@]/', $value) === 1 ? "'" . $value : $value;
     }
 
     public static function getPages(): array

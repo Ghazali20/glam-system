@@ -1,10 +1,25 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-[#faf8f5] px-6">
-        <div class="max-w-md w-full">
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] border border-stone-200/70">
+    <div class="min-h-screen bg-[#faf8f5] px-4 py-5 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+        <div class="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-6xl overflow-hidden rounded-[2.5rem] bg-white shadow-[0_25px_80px_rgba(41,37,36,0.08)] lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="relative hidden overflow-hidden bg-stone-900 p-12 text-white lg:flex lg:flex-col lg:justify-between">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(190,24,93,0.35),transparent_42%),linear-gradient(145deg,#292524,#0c0a09)]"></div>
+                <div class="absolute -bottom-24 -left-20 h-72 w-72 rounded-full border border-rose-300/20"></div>
+                <div class="absolute -bottom-16 -left-12 h-56 w-56 rounded-full border border-rose-300/10"></div>
+                <div class="relative z-10">
+                    <img src="{{ asset('assets/images/logo.png') }}" class="h-20 w-auto brightness-0 invert" alt="Glam By Ramdiah">
+                    <p class="mt-8 text-[10px] uppercase tracking-[0.35em] text-rose-200 font-bold">Luxury Bridal & MUA</p>
+                    <h1 class="mt-5 max-w-sm font-serif text-5xl italic leading-tight">Your most beautiful moments deserve a signature glow.</h1>
+                </div>
+                <p class="relative z-10 max-w-xs text-sm leading-relaxed text-stone-300 font-serif italic">
+                    Riasan elegan yang terasa seperti diri Anda sendiri—lebih percaya diri, lebih bercahaya.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-center p-6 sm:p-10 lg:p-14">
+                <div class="w-full max-w-md">
 
                 {{-- Back Link --}}
-                <div class="mb-6">
+                <div class="mb-8">
                     <a href="{{ route('user.home') }}" class="inline-flex items-center text-[10px] uppercase tracking-widest text-stone-400 hover:text-rose-700 transition font-bold">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -14,13 +29,13 @@
                 </div>
 
                 {{-- Logo --}}
-                <div class="flex justify-center mb-6">
-                    <img src="{{ asset('assets/images/logo.png') }}" class="h-20 w-auto" alt="Glam Logo">
+                <div class="mb-7 flex justify-center lg:hidden">
+                    <img src="{{ asset('assets/images/logo.png') }}" class="h-16 w-auto" alt="Glam Logo">
                 </div>
 
                 {{-- Heading --}}
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-serif italic text-stone-800 tracking-tight">Selamat Datang</h2>
+                <div class="mb-10 text-center">
+                    <h2 class="font-serif text-3xl italic tracking-tight text-stone-800 sm:text-4xl">Selamat Datang</h2>
                     <p class="text-[9px] uppercase tracking-[0.3em] text-stone-400 mt-2 font-bold">Masuk ke Akun Glam Anda</p>
                 </div>
 
@@ -59,11 +74,9 @@
                         <a href="{{ route('register') }}" class="text-rose-700 font-bold hover:underline ml-1 uppercase tracking-wider not-italic">Daftar</a>
                     </p>
                 </div>
+                </div>
             </div>
 
-            <p class="text-center mt-8 text-[9px] uppercase tracking-[0.4em] text-stone-300 font-bold italic">
-                Modern Glamour & Luxury Service
-            </p>
         </div>
     </div>
 </x-guest-layout>

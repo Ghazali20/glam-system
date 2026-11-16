@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\PaymentSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,10 @@ class BookingHistoryController extends Controller
             ->with(['service', 'invoice'])
             ->latest()
             ->get();
-        return view('user.bookings.index', compact('bookings'));
+        return view('user.bookings.index', [
+            'bookings' => $bookings,
+            'paymentSetting' => PaymentSetting::current(),
+        ]);
     }
 
     /**
@@ -32,7 +36,7 @@ class BookingHistoryController extends Controller
                 'booking_date' => 'required|date',
                 'whatsapp' => 'required|string',
                 'location' => 'required|string',
-                'payment_method' => 'required|string',
+                'payment_method' => 'required|string|in:' . implode(',', array_keys(PaymentSetting::current()->paymentOptions())),
             ]);
 
             // Menyimpan data pesanan lengkap dengan tenggat pembayaran

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\PaymentSetting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,10 @@ class InvoiceController extends Controller
         // Eager load data relasi agar rendering PDF efisien tanpa N+1
         $invoice->loadMissing(['booking.service', 'booking.user']);
 
-        $pdf = Pdf::loadView('user.invoice_pdf', compact('invoice'));
+        $pdf = Pdf::loadView('user.invoice_pdf', [
+            'invoice' => $invoice,
+            'paymentSetting' => PaymentSetting::current(),
+        ]);
 
         return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
     }

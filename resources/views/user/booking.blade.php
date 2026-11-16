@@ -65,9 +65,22 @@
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Metode Pembayaran Transfer</label>
                         <select id="payment_method" required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent">
                             <option value="" disabled selected>Pilih Bank Transfer Tujuan</option>
-                            <option value="BCA">BCA - 12345678 (a/n Ramdiah)</option>
-                            <option value="Mandiri">Mandiri - 88776655 (a/n Ramdiah)</option>
+                            @foreach($paymentSetting->paymentOptions() as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
                         </select>
+                        @if($paymentSetting->payment_instructions)
+                            <p class="mt-3 text-[11px] leading-relaxed text-stone-500">{{ $paymentSetting->payment_instructions }}</p>
+                        @endif
+                        @if($paymentSetting->qris_image_url)
+                            <div class="mt-4 flex flex-wrap items-center gap-4 rounded-2xl bg-stone-50 p-4">
+                                <img src="{{ $paymentSetting->qris_image_url }}" alt="QRIS pembayaran Glam By Ramdiah" class="h-28 w-28 rounded-xl object-contain bg-white p-2">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-stone-900">Bayar dengan QRIS</p>
+                                    <p class="mt-1 text-[11px] text-stone-500">Pilih QRIS di atas, lalu scan kode ini setelah booking dibuat.</p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <button type="submit" class="md:col-span-2 bg-stone-900 text-white py-4 rounded-full font-bold uppercase text-[10px] tracking-[0.25em] hover:bg-rose-700 transition-all shadow-md italic mt-4">

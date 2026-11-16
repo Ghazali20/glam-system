@@ -53,12 +53,26 @@
                                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-4">Instruksi Pembayaran</label>
                                         <div class="space-y-3">
                                             <div class="p-4 bg-white rounded-2xl border border-stone-200/70">
-                                                <p class="text-sm text-stone-500 italic">Transfer ke {{ $booking->payment_method ?? 'BCA' }}:</p>
-                                                <p class="text-lg font-mono font-bold text-stone-900 tracking-wider">
-                                                    {{ $booking->payment_method == 'BCA' ? '1234567890' : '8877665544' }}
-                                                </p>
-                                                <p class="text-[10px] text-stone-500 uppercase mt-1">a/n Glam By Ramdiah</p>
+                                                @if($booking->payment_method === 'QRIS' && $paymentSetting->qris_image_url)
+                                                    <p class="text-sm text-stone-500 italic mb-2">Scan QRIS berikut:</p>
+                                                    <img src="{{ $paymentSetting->qris_image_url }}" alt="QRIS pembayaran" class="h-36 w-36 rounded-xl object-contain bg-white p-2 mx-auto">
+                                                @else
+                                                    @php
+                                                        $account = collect($paymentSetting->activeBankAccounts())
+                                                            ->firstWhere('bank_name', $booking->payment_method);
+                                                    @endphp
+                                                    @if($account)
+                                                        <p class="text-sm text-stone-500 italic">Transfer ke {{ $account['bank_name'] }}:</p>
+                                                        <p class="text-lg font-mono font-bold text-stone-900 tracking-wider">{{ $account['account_number'] }}</p>
+                                                        <p class="text-[10px] text-stone-500 uppercase mt-1">a/n {{ $account['account_holder'] }}</p>
+                                                    @else
+                                                        <p class="text-sm text-stone-500">Metode pembayaran saat ini tidak tersedia. Hubungi admin melalui WhatsApp.</p>
+                                                    @endif
+                                                @endif
                                             </div>
+                                            @if($paymentSetting->payment_instructions)
+                                                <p class="text-[11px] leading-relaxed text-stone-500">{{ $paymentSetting->payment_instructions }}</p>
+                                            @endif
                                             <div class="text-center pt-2">
                                                 <p class="text-[9px] uppercase text-rose-700 font-bold tracking-widest mb-1">Batas Waktu Transfer</p>
                                                 <div class="text-2xl font-mono font-bold text-stone-900 tracking-tighter"

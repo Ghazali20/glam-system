@@ -6,6 +6,7 @@ use App\Http\Controllers\InvoiceController; // Tambahkan ini
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\HomepageSetting;
+use App\Models\PaymentSetting;
 use App\Models\Portfolio;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +40,9 @@ Route::get('/layanan', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
 
-    Route::get('/booking', function () { return view('user.booking'); })->name('user.booking.create');
+    Route::get('/booking', function () {
+        return view('user.booking', ['paymentSetting' => PaymentSetting::current()]);
+    })->name('user.booking.create');
     Route::post('/booking/store', [BookingHistoryController::class, 'store'])->name('user.booking.store');
     Route::get('/my-bookings', [BookingHistoryController::class, 'index'])->name('user.bookings.index');
 

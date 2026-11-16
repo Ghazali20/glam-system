@@ -18,4 +18,4 @@ Route::get('/user', function (Request $request) {
 Route::get('/services', [BookingController::class, 'getServices']);
 
 // Route untuk mengirim data booking dari Form HTML ke Database
-Route::post('/bookings', [BookingController::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->post('/bookings', [BookingController::class, 'store']);

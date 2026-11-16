@@ -17,6 +17,7 @@ class User extends Authenticatable implements FilamentUser // Tambahkan implemen
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     protected $hidden = [
@@ -29,6 +30,7 @@ class User extends Authenticatable implements FilamentUser // Tambahkan implemen
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -37,13 +39,7 @@ class User extends Authenticatable implements FilamentUser // Tambahkan implemen
      */
     public function isAdmin(): bool
     {
-        $adminEmails = array_map('trim', explode(',', env('ADMIN_EMAIL', 'admin01@glambyramdiah.com,ghazali@gmail.com')));
-        foreach ($adminEmails as $email) {
-            if (strcasecmp($this->email, $email) === 0) {
-                return true;
-            }
-        }
-        return false;
+        return (bool) $this->is_admin;
     }
 
     /**

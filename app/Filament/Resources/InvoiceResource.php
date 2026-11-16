@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Models\Invoice;
+use App\Models\PaymentSetting;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,11 +25,8 @@ class InvoiceResource extends Resource
                     Forms\Components\TextInput::make('invoice_number')->disabled(),
                     Forms\Components\Select::make('payment_method')
                         ->label('Metode Pembayaran')
-                        ->options([
-                            'BCA' => 'Transfer BCA - 12345678 (A/N Ramdiah)',
-                            'Mandiri' => 'Transfer Mandiri - 87654321 (A/N Ramdiah)',
-                            'GOPAY' => 'GoPay/Dana - 08123456789',
-                        ])->required(),
+                        ->options(fn (): array => PaymentSetting::current()->paymentOptions())
+                        ->required(),
                     Forms\Components\DateTimePicker::make('payment_deadline')
                         ->label('Batas Waktu Pembayaran')
                         ->default(now()->addHours(24)),
