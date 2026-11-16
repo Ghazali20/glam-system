@@ -40,9 +40,13 @@ class BookingHistoryController extends Controller
             $validated = $request->validate([
                 'service_id' => 'required|exists:services,id',
                 'booking_date' => 'required|date|after_or_equal:today',
+                'event_type' => 'required|string|in:Wedding,Engagement,Graduation,Prewedding,Party,Other',
+                'event_time' => 'required|date_format:H:i',
+                'attendee_count' => 'required|integer|min:1|max:50',
                 'whatsapp' => ['required', 'string', 'regex:/^(?:\+62|62|0)[0-9]{8,13}$/'],
                 'location' => 'required|string|max:255',
                 'address_details' => 'required|string|max:1000',
+                'special_requests' => 'nullable|string|max:2000',
                 'payment_method' => 'required|string|in:' . implode(',', array_keys(PaymentSetting::current()->paymentOptions())),
             ]);
 
@@ -52,9 +56,13 @@ class BookingHistoryController extends Controller
                     'customer_name' => Auth::user()->name,
                     'service_id' => $validated['service_id'],
                     'booking_date' => $validated['booking_date'],
+                    'event_type' => $validated['event_type'],
+                    'event_time' => $validated['event_time'],
+                    'attendee_count' => $validated['attendee_count'],
                     'whatsapp' => $validated['whatsapp'],
                     'location' => $validated['location'],
                     'address_details' => $validated['address_details'],
+                    'special_requests' => $validated['special_requests'] ?? null,
                     'payment_method' => $validated['payment_method'],
                     'payment_deadline' => now()->addHours(10),
                     'status' => 'pending',
@@ -85,11 +93,20 @@ class BookingHistoryController extends Controller
                     ->sendToDatabase($admin);
             });
 
+            $whatsappMessage = "Halo Glam By Ramdiah, saya ingin mengonfirmasi booking baru.\n\n" .
+                "Invoice: {$booking->invoice->invoice_number}\n" .
+                "Nama: {$booking->customer_name}\n" .
+                "Acara: {$booking->event_type}\n" .
+                "Tanggal: {$booking->booking_date} pukul {$booking->event_time}\n" .
+                "Layanan: {$booking->service->name}\n" .
+                "Metode pembayaran: {$booking->payment_method}";
+
             return response()->json([
                 'success' => true,
                 'message' => 'Booking berhasil disimpan',
                 'booking_id' => $booking->id,
                 'invoice_number' => $booking->invoice->invoice_number,
+                'whatsapp_url' => PaymentSetting::current()->whatsappUrl($whatsappMessage),
             ]);
         } catch (ValidationException $e) {
             throw $e;

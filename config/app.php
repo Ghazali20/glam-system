@@ -129,6 +129,6 @@ return [
     |--------------------------------------------------------------------------
     */
     'admin_email' => env('ADMIN_EMAIL', 'admin01@glambyramdiah.com'),
-    'admin_whatsapp' => env('ADMIN_WHATSAPP', '628123456789'),
+    'admin_whatsapp' => env('ADMIN_WHATSAPP', '6282128598690'),
 
 ];

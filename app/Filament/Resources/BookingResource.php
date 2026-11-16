@@ -32,6 +32,26 @@ class BookingResource extends Resource
                     Forms\Components\DatePicker::make('booking_date')
                         ->label('Tanggal Acara')
                         ->required(),
+                    Forms\Components\Select::make('event_type')
+                        ->label('Jenis Acara')
+                        ->options([
+                            'Wedding' => 'Wedding',
+                            'Engagement' => 'Engagement / Lamaran',
+                            'Graduation' => 'Wisuda',
+                            'Prewedding' => 'Prewedding',
+                            'Party' => 'Party / Acara Formal',
+                            'Other' => 'Lainnya',
+                        ])
+                        ->required(),
+                    Forms\Components\TimePicker::make('event_time')
+                        ->label('Jam Mulai Makeup')
+                        ->required(),
+                    Forms\Components\TextInput::make('attendee_count')
+                        ->label('Jumlah yang Dirias')
+                        ->numeric()
+                        ->minValue(1)
+                        ->maxValue(50)
+                        ->required(),
                     Forms\Components\Select::make('service_id')
                         ->label('Layanan')
                         ->relationship('service', 'name')
@@ -57,6 +77,10 @@ class BookingResource extends Resource
 
                     Forms\Components\Textarea::make('address_details')
                         ->label('Alamat Lengkap & Catatan')
+                        ->columnSpanFull(),
+                    Forms\Components\Textarea::make('special_requests')
+                        ->label('Permintaan Khusus')
+                        ->placeholder('Contoh: alergi produk, referensi makeup, atau kebutuhan touch-up.')
                         ->columnSpanFull(),
                 ])->columns(2)
             ]);

@@ -20,8 +20,12 @@ class BookingController extends Controller
             'service_id'      => 'required|exists:services,id',
             'whatsapp'        => 'required|string|max:20',
             'booking_date'    => 'required|date',
+            'event_type'      => 'required|string|in:Wedding,Engagement,Graduation,Prewedding,Party,Other',
+            'event_time'      => 'required|date_format:H:i',
+            'attendee_count'  => 'required|integer|min:1|max:50',
             'location'        => 'required|string',
             'address_details' => 'required|string',
+            'special_requests' => 'nullable|string|max:2000',
             'payment_method'  => 'required|string|in:' . implode(',', array_keys(PaymentSetting::current()->paymentOptions())),
         ]);
 

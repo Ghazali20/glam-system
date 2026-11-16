@@ -33,7 +33,7 @@ class PaymentSetting extends Model
                     ],
                 ],
                 'payment_instructions' => 'Transfer sesuai total invoice, lalu kirim bukti pembayaran melalui WhatsApp admin.',
-                'admin_whatsapp' => config('app.admin_whatsapp'),
+                'admin_whatsapp' => '082128598690',
                 'is_active' => true,
             ],
         );

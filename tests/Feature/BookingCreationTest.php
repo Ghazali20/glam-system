@@ -30,6 +30,9 @@ class BookingCreationTest extends TestCase
         $response = $this->actingAs($customer)->postJson(route('user.booking.store'), [
             'service_id' => $service->id,
             'booking_date' => now()->addDay()->toDateString(),
+            'event_type' => 'Wedding',
+            'event_time' => '08:00',
+            'attendee_count' => 1,
             'whatsapp' => '081234567890',
             'location' => 'Padang, Kuranji',
             'address_details' => 'Jl. Khatib Sulaiman No. 10',
@@ -64,6 +67,9 @@ class BookingCreationTest extends TestCase
         $response = $this->actingAs($customer)->postJson(route('user.booking.store'), [
             'service_id' => 1,
             'booking_date' => now()->subDay()->toDateString(),
+            'event_type' => 'Wedding',
+            'event_time' => '08:00',
+            'attendee_count' => 1,
             'whatsapp' => 'invalid',
             'location' => 'Padang',
             'address_details' => 'Alamat',
