@@ -33,9 +33,30 @@ class PaymentSetting extends Model
                     ],
                 ],
                 'payment_instructions' => 'Transfer sesuai total invoice, lalu kirim bukti pembayaran melalui WhatsApp admin.',
+                'admin_whatsapp' => config('app.admin_whatsapp'),
                 'is_active' => true,
             ],
         );
+    }
+
+    public function whatsappNumber(): ?string
+    {
+        $number = preg_replace('/\D+/', '', (string) $this->admin_whatsapp);
+
+        if ($number === '') {
+            return null;
+        }
+
+        return str_starts_with($number, '0')
+            ? '62' . substr($number, 1)
+            : $number;
+    }
+
+    public function whatsappUrl(string $message): ?string
+    {
+        $number = $this->whatsappNumber();
+
+        return $number ? 'https://wa.me/' . $number . '?text=' . urlencode($message) : null;
     }
 
     public function activeBankAccounts(): array

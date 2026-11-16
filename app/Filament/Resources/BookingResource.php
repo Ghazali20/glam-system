@@ -120,7 +120,15 @@ class BookingResource extends Resource
                     ->color('success')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending')
-                    ->action(fn ($record) => $record->update(['status' => 'confirmed'])),
+                    ->action(function ($record): void {
+                        $record->load('invoice');
+
+                        if ($record->invoice) {
+                            $record->invoice->update(['payment_status' => 'paid']);
+                        } else {
+                            $record->update(['status' => 'confirmed']);
+                        }
+                    }),
 
                 // TOMBOL BARU: Lihat Invoice
                 Tables\Actions\Action::make('view_invoice')

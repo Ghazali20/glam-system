@@ -103,7 +103,7 @@
                     </div>
 
                         <button id="submitButton" type="submit" class="md:col-span-2 bg-stone-900 text-white py-4 rounded-full font-bold uppercase text-[10px] tracking-[0.25em] hover:bg-rose-700 transition-all shadow-md italic mt-4 disabled:cursor-not-allowed disabled:opacity-60">
-                        Konfirmasi & Lanjutkan ke WhatsApp
+                        Buat Reservasi & Lihat Instruksi Pembayaran
                     </button>
                 </form>
             </div>
@@ -179,29 +179,17 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    // Fitur WhatsApp Otomatis
-                    const waNumber = "{{ config('app.admin_whatsapp', '628123456789') }}";
-                    const serviceName = document.getElementById('service').options[document.getElementById('service').selectedIndex].text;
-                    const waMessage = `Halo Glam By Ramdiah, saya telah melakukan booking:%0A%0A` +
-                                      `Nama: ${document.getElementById('name').value}%0A` +
-                                      `Layanan: ${serviceName}%0A` +
-                                      `Tanggal: ${formData.booking_date}%0A` +
-                                      `Lokasi: ${fullLocation}%0A` +
-                                      `Metode: Transfer ${formData.payment_method}%0A%0A` +
-                                      `Mohon segera dikonfirmasi ya, terima kasih!`;
-
-                    alert(`Reservasi ${result.invoice_number} berhasil dicatat! Anda akan diarahkan ke WhatsApp untuk konfirmasi pembayaran.`);
-                    window.open(`https://wa.me/${waNumber}?text=${waMessage}`, '_blank');
+                    alert(`Reservasi ${result.invoice_number} berhasil dibuat. Silakan ikuti instruksi pembayaran pada halaman riwayat pesanan.`);
                     window.location.href = "{{ route('user.bookings.index') }}";
                 } else {
                     alert("Gagal menyimpan: " + (result.message || "Terjadi kesalahan"));
                     submitButton.disabled = false;
-                    submitButton.textContent = 'Konfirmasi & Lanjutkan ke WhatsApp';
+                    submitButton.textContent = 'Buat Reservasi & Lihat Instruksi Pembayaran';
                 }
             } catch (error) {
                 alert("Kesalahan koneksi ke server. Pastikan server lokal Anda aktif.");
                 submitButton.disabled = false;
-                submitButton.textContent = 'Konfirmasi & Lanjutkan ke WhatsApp';
+                submitButton.textContent = 'Buat Reservasi & Lihat Instruksi Pembayaran';
             }
         });
 

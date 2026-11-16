@@ -508,7 +508,7 @@
                    class="w-full sm:w-auto bg-rose-700 hover:bg-rose-800 text-white px-10 py-4 rounded-full font-bold uppercase text-[10px] tracking-widest transition-all shadow-xl italic">
                     Booking Jadwal Acara ✨
                 </a>
-                <a href="https://wa.me/{{ config('app.admin_whatsapp', '628123456789') }}?text={{ urlencode('Halo Kak Anis Glam By Ramdiah, saya ingin konsultasi jadwal MUA untuk tanggal acara saya.') }}"
+                <a href="{{ $paymentSetting->whatsappUrl('Halo Kak Anis Glam By Ramdiah, saya ingin konsultasi jadwal MUA untuk tanggal acara saya.') }}"
                    target="_blank"
                    class="w-full sm:w-auto bg-white/10 border border-white/20 text-white px-8 py-4 rounded-full font-bold uppercase text-[10px] tracking-widest hover:bg-white hover:text-stone-900 transition-all italic flex items-center justify-center gap-2">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
@@ -547,7 +547,13 @@
             <div class="space-y-3">
                 <h4 class="text-white font-bold uppercase text-[10px] tracking-widest">Hubungi Kami</h4>
                 <ul class="space-y-2 text-stone-400">
-                    <li>WhatsApp: <a href="https://wa.me/{{ config('app.admin_whatsapp', '628123456789') }}" target="_blank" class="hover:text-rose-400 text-stone-300 font-mono">+{{ config('app.admin_whatsapp', '628123456789') }}</a></li>
+                    <li>WhatsApp:
+                        @if($paymentSetting->whatsappNumber())
+                            <a href="https://wa.me/{{ $paymentSetting->whatsappNumber() }}" target="_blank" rel="noopener" class="hover:text-rose-400 text-stone-300 font-mono">+{{ $paymentSetting->whatsappNumber() }}</a>
+                        @else
+                            <span class="text-stone-500">Belum diatur</span>
+                        @endif
+                    </li>
                     <li>Instagram: <span class="text-stone-300">@glambyramdiah</span></li>
                     <li>Jam Operasional: 07.00 - 21.00 WIB</li>
                 </ul>

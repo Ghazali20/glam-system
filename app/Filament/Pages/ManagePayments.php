@@ -67,6 +67,11 @@ class ManagePayments extends Page implements HasForms
                             ->label('Instruksi Pembayaran')
                             ->rows(5)
                             ->required(),
+                        TextInput::make('admin_whatsapp')
+                            ->label('Nomor WhatsApp Admin')
+                            ->tel()
+                            ->required()
+                            ->helperText('Dipakai pelanggan untuk mengirim konfirmasi pembayaran. Contoh: 081234567890 atau 628123456789.'),
                         Toggle::make('is_active')
                             ->label('Aktifkan Pembayaran')
                             ->default(true),

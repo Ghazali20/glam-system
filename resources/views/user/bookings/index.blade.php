@@ -73,6 +73,14 @@
                                             @if($paymentSetting->payment_instructions)
                                                 <p class="text-[11px] leading-relaxed text-stone-500">{{ $paymentSetting->payment_instructions }}</p>
                                             @endif
+                                            @if($paymentSetting->whatsappUrl('Halo Glam By Ramdiah, saya ingin mengirim konfirmasi pembayaran untuk invoice ' . ($booking->invoice?->invoice_number ?? '-') . '.'))
+                                                <a href="{{ $paymentSetting->whatsappUrl('Halo Glam By Ramdiah, saya ingin mengirim konfirmasi pembayaran untuk invoice ' . ($booking->invoice?->invoice_number ?? '-') . '.') }}"
+                                                   target="_blank"
+                                                   rel="noopener"
+                                                   class="inline-flex items-center justify-center rounded-full bg-stone-900 px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-white transition hover:bg-rose-700">
+                                                    Kirim Konfirmasi Pembayaran
+                                                </a>
+                                            @endif
                                             <div class="text-center pt-2">
                                                 <p class="text-[9px] uppercase text-rose-700 font-bold tracking-widest mb-1">Batas Waktu Transfer</p>
                                                 <div class="text-2xl font-mono font-bold text-stone-900 tracking-tighter"
@@ -104,7 +112,7 @@
                                     </span>
 
                                     @if($booking->status == 'pending')
-                                        <a href="https://wa.me/{{ config('app.admin_whatsapp', '628123456789') }}?text={{ urlencode('Halo Glam By Ramdiah, saya ingin mengirimkan bukti pembayaran untuk pesanan ' . ($booking->service->name ?? 'Makeup') . ' pada tanggal ' . $booking->booking_date . '. Terima kasih!') }}"
+                                        <a href="{{ $paymentSetting->whatsappUrl('Halo Glam By Ramdiah, saya ingin mengirimkan bukti pembayaran untuk pesanan ' . ($booking->service->name ?? 'Makeup') . ' pada tanggal ' . $booking->booking_date . '. Terima kasih!') }}"
                                            target="_blank"
                                            class="w-full lg:w-auto bg-stone-900 text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-rose-700 transition-all shadow-md text-center italic">
                                             Kirim Bukti Pembayaran

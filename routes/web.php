@@ -18,8 +18,9 @@ Route::get('/', function () {
         ->orderBy('order', 'asc')
         ->get();
     $homepageSettings = HomepageSetting::current();
+    $paymentSetting = PaymentSetting::current();
 
-    return view('user.home', compact('services', 'portfolios', 'homepageSettings'));
+    return view('user.home', compact('services', 'portfolios', 'homepageSettings', 'paymentSetting'));
 })->name('user.home');
 
 Route::get('/katalog', function () {
