@@ -1,11 +1,30 @@
 <x-app-layout>
-    <div class="py-16 bg-[#faf8f5] flex justify-center items-center min-h-[85vh]">
-        <div class="max-w-4xl w-full px-6">
-            <div class="bg-white p-10 md:p-16 rounded-[3rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-stone-200/80 text-center">
-                <span class="text-[10px] uppercase tracking-[0.3em] text-rose-700 font-bold block mb-2">Reservation Form</span>
-                <h2 class="text-3xl md:text-4xl font-serif italic text-stone-900 mb-12">Reservasi Jadwal MUA</h2>
+    <div class="py-12 md:py-16 bg-[#faf8f5] min-h-[85vh]">
+        <div class="max-w-5xl w-full mx-auto px-4 sm:px-6">
+            <div class="mb-8 text-center">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-rose-700 font-bold block mb-2">Secure Reservation</span>
+                <h2 class="text-3xl md:text-5xl font-serif italic text-stone-900">Reservasi Jadwal MUA</h2>
+                <p class="mt-3 text-sm text-stone-500 font-serif italic">Isi detail acara sekali, lalu dapatkan invoice dan instruksi pembayaran yang jelas.</p>
+            </div>
 
-                <form id="bookingForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+            <div class="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div class="rounded-2xl border border-rose-200 bg-white p-4 text-center">
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-rose-700">01</span>
+                    <p class="mt-1 text-xs font-semibold text-stone-800">Detail acara</p>
+                </div>
+                <div class="rounded-2xl border border-stone-200 bg-white p-4 text-center">
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-stone-400">02</span>
+                    <p class="mt-1 text-xs font-semibold text-stone-800">Pilih pembayaran</p>
+                </div>
+                <div class="rounded-2xl border border-stone-200 bg-white p-4 text-center">
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-stone-400">03</span>
+                    <p class="mt-1 text-xs font-semibold text-stone-800">Konfirmasi WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 sm:p-10 md:p-14 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-stone-200/80">
+
+                <form id="bookingForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left" novalidate>
                     @csrf
 
                     {{-- Nama & WhatsApp --}}
@@ -29,7 +48,7 @@
 
                     <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Tanggal Acara</label>
-                        <input type="date" id="date" required class="w-full border-none p-0 focus:ring-0 text-stone-500 bg-transparent">
+                        <input type="date" id="date" min="{{ now()->format('Y-m-d') }}" required class="w-full border-none p-0 focus:ring-0 text-stone-500 bg-transparent">
                     </div>
 
                     {{-- Lokasi Sumatera Barat --}}
@@ -57,7 +76,7 @@
                     {{-- Alamat Lengkap & Catatan --}}
                     <div class="md:col-span-2 border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Alamat Lengkap & Catatan</label>
-                        <textarea id="address" rows="1" placeholder="Nama jalan, nomor rumah, atau catatan tambahan..." required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent resize-none"></textarea>
+                        <textarea id="address" rows="2" placeholder="Nama jalan, nomor rumah, atau catatan tambahan..." required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent resize-none"></textarea>
                     </div>
 
                     {{-- Metode Pembayaran --}}
@@ -83,7 +102,7 @@
                         @endif
                     </div>
 
-                    <button type="submit" class="md:col-span-2 bg-stone-900 text-white py-4 rounded-full font-bold uppercase text-[10px] tracking-[0.25em] hover:bg-rose-700 transition-all shadow-md italic mt-4">
+                        <button id="submitButton" type="submit" class="md:col-span-2 bg-stone-900 text-white py-4 rounded-full font-bold uppercase text-[10px] tracking-[0.25em] hover:bg-rose-700 transition-all shadow-md italic mt-4 disabled:cursor-not-allowed disabled:opacity-60">
                         Konfirmasi & Lanjutkan ke WhatsApp
                     </button>
                 </form>
@@ -134,12 +153,16 @@
 
         document.getElementById('bookingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Menyimpan Reservasi...';
             const fullLocation = `${document.getElementById('regency').value}, ${document.getElementById('district').value}. ${document.getElementById('address').value}`;
             const formData = {
                 service_id: document.getElementById('service').value,
                 booking_date: document.getElementById('date').value,
                 whatsapp: document.getElementById('whatsapp').value,
                 location: fullLocation,
+                address_details: document.getElementById('address').value,
                 payment_method: document.getElementById('payment_method').value,
             };
 
@@ -167,14 +190,18 @@
                                       `Metode: Transfer ${formData.payment_method}%0A%0A` +
                                       `Mohon segera dikonfirmasi ya, terima kasih!`;
 
-                    alert("Pesanan dicatat! Anda akan diarahkan ke WhatsApp untuk konfirmasi pembayaran.");
+                    alert(`Reservasi ${result.invoice_number} berhasil dicatat! Anda akan diarahkan ke WhatsApp untuk konfirmasi pembayaran.`);
                     window.open(`https://wa.me/${waNumber}?text=${waMessage}`, '_blank');
                     window.location.href = "{{ route('user.bookings.index') }}";
                 } else {
                     alert("Gagal menyimpan: " + (result.message || "Terjadi kesalahan"));
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Konfirmasi & Lanjutkan ke WhatsApp';
                 }
             } catch (error) {
                 alert("Kesalahan koneksi ke server. Pastikan server lokal Anda aktif.");
+                submitButton.disabled = false;
+                submitButton.textContent = 'Konfirmasi & Lanjutkan ke WhatsApp';
             }
         });
 

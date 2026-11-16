@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Membuat akun Admin untuk login ke Dashboard Filament
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => env('ADMIN_EMAIL', 'admin01@glambyramdiah.com')],
             [
                 'name' => 'Admin Glam By Ramdiah',
