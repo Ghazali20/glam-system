@@ -1,38 +1,39 @@
 <x-app-layout>
-    <div class="py-12 bg-white flex justify-center items-center min-h-[85vh]">
+    <div class="py-16 bg-[#faf8f5] flex justify-center items-center min-h-[85vh]">
         <div class="max-w-4xl w-full px-6">
-            <div class="bg-white p-12 md:p-20 rounded-[4rem] shadow-[0_15px_60px_rgba(0,0,0,0.03)] border border-gray-50 text-center">
-                <h2 class="text-4xl font-serif italic text-stone-800 mb-16">Pesan Jasa MUA</h2>
+            <div class="bg-white p-10 md:p-16 rounded-[3rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-stone-200/80 text-center">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-rose-700 font-bold block mb-2">Reservation Form</span>
+                <h2 class="text-3xl md:text-4xl font-serif italic text-stone-900 mb-12">Reservasi Jadwal MUA</h2>
 
-                <form id="bookingForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-left">
+                <form id="bookingForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
                     @csrf
 
                     {{-- Nama & WhatsApp --}}
-                    <div class="border-b border-gray-100 pb-2">
-                        <label class="text-[9px] uppercase tracking-[0.2em] text-pink-500 font-bold block mb-1">Nama Lengkap</label>
-                        <input type="text" id="name" value="{{ Auth::user()->name }}" readonly class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent">
+                    <div class="border-b border-stone-200 pb-2">
+                        <label class="text-[9px] uppercase tracking-[0.2em] text-rose-700 font-bold block mb-1">Nama Lengkap</label>
+                        <input type="text" id="name" value="{{ Auth::user()->name }}" readonly class="w-full border-none p-0 focus:ring-0 text-stone-800 bg-transparent font-medium">
                     </div>
 
-                    <div class="border-b border-gray-100 pb-2">
+                    <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Nomor WhatsApp Pelanggan</label>
                         <input type="tel" id="whatsapp" placeholder="08..." required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent">
                     </div>
 
                     {{-- Layanan & Tanggal --}}
-                    <div class="border-b border-gray-100 pb-2">
+                    <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Pilih Layanan</label>
                         <select id="service" required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent cursor-pointer">
                             <option value="" disabled selected>Memuat layanan...</option>
                         </select>
                     </div>
 
-                    <div class="border-b border-gray-100 pb-2">
+                    <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Tanggal Acara</label>
                         <input type="date" id="date" required class="w-full border-none p-0 focus:ring-0 text-stone-500 bg-transparent">
                     </div>
 
                     {{-- Lokasi Sumatera Barat --}}
-                    <div class="border-b border-gray-100 pb-2">
+                    <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Kabupaten / Kota</label>
                         <select id="regency" required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent" onchange="updateDistricts()">
                             <option value="" disabled selected>Pilih Kabupaten/Kota</option>
@@ -46,7 +47,7 @@
                         </select>
                     </div>
 
-                    <div class="border-b border-gray-100 pb-2">
+                    <div class="border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Detail Kecamatan</label>
                         <select id="district" required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent">
                             <option value="" disabled selected>Pilih Kecamatan</option>
@@ -54,23 +55,23 @@
                     </div>
 
                     {{-- Alamat Lengkap & Catatan --}}
-                    <div class="md:col-span-2 border-b border-gray-100 pb-2">
+                    <div class="md:col-span-2 border-b border-stone-200 pb-2">
                         <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Alamat Lengkap & Catatan</label>
                         <textarea id="address" rows="1" placeholder="Nama jalan, nomor rumah, atau catatan tambahan..." required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent resize-none"></textarea>
                     </div>
 
                     {{-- Metode Pembayaran --}}
-                    <div class="md:col-span-2 border-b border-gray-100 pb-2">
-                        <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Metode Pembayaran</label>
+                    <div class="md:col-span-2 border-b border-stone-200 pb-2">
+                        <label class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1">Metode Pembayaran Transfer</label>
                         <select id="payment_method" required class="w-full border-none p-0 focus:ring-0 text-stone-700 bg-transparent">
-                            <option value="" disabled selected>Pilih Bank Transfer</option>
+                            <option value="" disabled selected>Pilih Bank Transfer Tujuan</option>
                             <option value="BCA">BCA - 12345678 (a/n Ramdiah)</option>
                             <option value="Mandiri">Mandiri - 88776655 (a/n Ramdiah)</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="md:col-span-2 bg-stone-900 text-white py-5 rounded-full font-bold uppercase text-[10px] tracking-[0.3em] hover:bg-pink-600 transition-all shadow-xl italic mt-6">
-                        Konfirmasi & Bayar Sekarang
+                    <button type="submit" class="md:col-span-2 bg-stone-900 text-white py-4 rounded-full font-bold uppercase text-[10px] tracking-[0.25em] hover:bg-rose-700 transition-all shadow-md italic mt-4">
+                        Konfirmasi & Lanjutkan ke WhatsApp
                     </button>
                 </form>
             </div>

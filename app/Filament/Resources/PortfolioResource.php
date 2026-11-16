@@ -63,6 +63,11 @@ class PortfolioResource extends Resource
                             ->label('Tampilkan di Katalog Publik')
                             ->default(true),
 
+                        Forms\Components\Toggle::make('show_on_home')
+                            ->label('Tampilkan di Koleksi Harian')
+                            ->default(true)
+                            ->helperText('Foto aktif yang dipilih akan berjalan di carousel landing page.'),
+
                         Forms\Components\TextInput::make('order')
                             ->label('Urutan Prioritas')
                             ->numeric()
@@ -95,6 +100,9 @@ class PortfolioResource extends Resource
 
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Tampil di Web'),
+
+                Tables\Columns\ToggleColumn::make('show_on_home')
+                    ->label('Koleksi Harian'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Unggah')

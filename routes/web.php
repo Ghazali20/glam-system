@@ -5,6 +5,7 @@ use App\Http\Controllers\User\BookingHistoryController;
 use App\Http\Controllers\InvoiceController; // Tambahkan ini
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\HomepageSetting;
 use App\Models\Portfolio;
 use Illuminate\Support\Facades\Route;
 
@@ -12,11 +13,12 @@ Route::get('/', function () {
     $services = Service::with('category')->take(3)->get();
     $portfolios = Portfolio::with('category')
         ->where('is_active', true)
+        ->where('show_on_home', true)
         ->orderBy('order', 'asc')
-        ->take(6)
         ->get();
+    $homepageSettings = HomepageSetting::current();
 
-    return view('user.home', compact('services', 'portfolios'));
+    return view('user.home', compact('services', 'portfolios', 'homepageSettings'));
 })->name('user.home');
 
 Route::get('/katalog', function () {

@@ -14,6 +14,7 @@ class Portfolio extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'show_on_home' => 'boolean',
         'order' => 'integer',
     ];
 
